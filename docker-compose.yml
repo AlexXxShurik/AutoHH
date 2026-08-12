@@ -1,0 +1,17 @@
+services:
+  autohh:
+    build: .
+    container_name: autohh
+    env_file:
+      - .env
+    environment:
+      HEADLESS: "true"
+      COOKIES_FILE: /app/data/cookies.pkl
+      INPUT_SERVER_URL: http://host.docker.internal:8765
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./data:/app/data
+    stdin_open: true
+    tty: true
+    restart: unless-stopped

@@ -11,6 +11,7 @@ class Settings:
     COOKIES_FILE: str | None = getenv("COOKIES_FILE", "cookies.pkl")
     CRON: str = getenv("CRON", "0 * * * *")
     TZ: str = getenv("TZ", "Asia/Almaty")
+    INPUT_SERVER_URL: str | None = getenv("INPUT_SERVER_URL")
 
 
 settings = Settings()
