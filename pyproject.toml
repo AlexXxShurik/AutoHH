@@ -1,0 +1,24 @@
+[project]
+name = "auto-hh"
+version = "0.1.0"
+description = "Parser for hh.ru site"
+authors = [
+    {name = "alexxx666"}
+]
+requires-python = ">=3.11,<4"
+dependencies = [
+    "selenium (>=4.47.0,<5.0.0)",
+    "webdriver-manager (>=4.1.2,<5.0.0)",
+    "python-dotenv (>=1.2.2,<2.0.0)",
+    "requests (>=2.34.2,<3.0.0)",
+    "beautifulsoup4 (>=4.15.0,<5.0.0)",
+    "lxml (>=6.1.1,<7.0.0)",
+    "taskiq (>=0.12.4,<0.13.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
