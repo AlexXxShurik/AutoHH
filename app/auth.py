@@ -52,8 +52,15 @@ def load_cookies(driver: WebDriver) -> bool:
     with open(COOKIES_FILE, "rb") as f:
         cookies = pickle.load(f)
     for cookie in cookies:
-        cookie["domain"] = host
-        driver.add_cookie(cookie)
+        try:
+            driver.add_cookie(cookie)
+        except Exception:
+            fallback = dict(cookie)
+            fallback["domain"] = host
+            try:
+                driver.add_cookie(fallback)
+            except Exception:
+                continue
     return bool(cookies)
 
 
