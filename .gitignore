@@ -11,3 +11,4 @@ compose_login.log
 input_server.log
 .input_server.pid
 cover_letter.txt
+blocked_words.txt
