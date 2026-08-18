@@ -51,3 +51,7 @@ Low-Code
 Дата-инженер
 Nest. js
 .Net
+Golang
+Frontend
+Go-разработчик
+Intern
