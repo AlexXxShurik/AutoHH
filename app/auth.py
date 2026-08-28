@@ -47,6 +47,7 @@ def is_logged_in(driver: WebDriver) -> bool:
 def load_cookies(driver: WebDriver) -> bool:
     if not COOKIES_FILE.exists():
         return False
+    driver.delete_all_cookies()
     driver.get(settings.BASE_URL)
     host = urlparse(driver.current_url).netloc
     with open(COOKIES_FILE, "rb") as f:
@@ -183,6 +184,7 @@ def ensure_logged_in(driver: WebDriver) -> None:
         return
 
     if settings.HH_EMAIL:
+        driver.delete_all_cookies()
         _click_first_step(driver)
         _select_email_tab(driver)
         _enter_email(driver)
