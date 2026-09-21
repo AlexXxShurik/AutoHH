@@ -18,6 +18,12 @@ _APPLY_BUTTON_SELECTORS = [
 ]
 _RELOCATION_CONFIRM = (By.CSS_SELECTOR, 'button[data-qa="relocation-warning-confirm"]')
 _LETTER_INPUT = (By.CSS_SELECTOR, 'textarea[data-qa="vacancy-response-popup-form-letter-input"]')
+_RESPONSE_SUBMIT_SELECTORS = [
+    (By.CSS_SELECTOR, 'button[data-qa="vacancy-response-submit-popup"]'),
+    (By.CSS_SELECTOR, 'button[data-qa="vacancy-response-submit"]'),
+    (By.XPATH, '//button[.//span[text()="Отправить"]]'),
+    (By.XPATH, '//button[.//span[text()="Откликнуться"]]'),
+]
 _RESPONSE_CLOSE = (By.CSS_SELECTOR, 'button[data-qa="response-popup-close"]')
 _RESPONDED_MARKERS = ("вы откликнулись", "отклик уже отправлен")
 _CHAT_BUTTON = (By.CSS_SELECTOR, 'button[data-qa="vacancy-response-link-view-topic"]')
@@ -144,10 +150,23 @@ def apply_to_vacancy(driver: WebDriver, vacancy: Vacancy, letter: str) -> str:
 
     textarea = _first_found(driver, [_LETTER_INPUT], timeout=8)
     if textarea is not None:
+        _set_value_js(driver, textarea, letter)
+        try:
+            WebDriverWait(driver, 5).until(
+                lambda d: textarea.get_attribute("value") == letter
+            )
+        except Exception:
+            pass
+
+        submit_btn = _first_found(driver, _RESPONSE_SUBMIT_SELECTORS, timeout=5)
+        if submit_btn is not None:
+            _click(submit_btn)
+            return "отклик отправлен через форму с сопроводительным письмом"
+
         close = _first_found(driver, [_RESPONSE_CLOSE], timeout=3)
         if close is not None:
             _click(close)
-        return "пропущено: нужна форма с сопроводительным письмом"
+        return "ошибка: кнопка отправки формы отклика не найдена"
 
     return _add_cover_letter_in_chat(driver, letter)
 

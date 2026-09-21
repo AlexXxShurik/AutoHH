@@ -7,17 +7,26 @@ from app.config import settings
 
 TIMEOUT = 30
 
+MY_RESUMES_URL = f"{settings.BASE_URL}/applicant/my_resumes?hhtmFrom=applicant_profile"
 
-def raise_resume(driver: WebDriver) -> bool:
-    """Поднимает резюме, если кнопка доступна. Возвращает True при успехе."""
-    driver.get(settings.BASE_URL)
-    try:
-        button = WebDriverWait(driver, TIMEOUT).until(
-            EC.element_to_be_clickable(
-                (By.CSS_SELECTOR, '[data-qa="applicant-index-nba-action_update-resumes"]')
-            )
+
+def raise_resume(driver: WebDriver) -> int:
+    """Поднимает все доступные резюме на странице my_resumes.
+
+    Возвращает количество успешно поднятых резюме.
+    """
+    driver.get(MY_RESUMES_URL)
+
+    buttons = WebDriverWait(driver, TIMEOUT).until(
+        EC.presence_of_all_elements_located(
+            (By.CSS_SELECTOR, '[data-qa="resume-update-button_actions"]')
         )
-        button.click()
-        return True
-    except Exception:
-        return False
+    )
+
+    raised = 0
+    for btn in buttons:
+        if btn.is_enabled():
+            btn.click()
+            raised += 1
+
+    return raised
